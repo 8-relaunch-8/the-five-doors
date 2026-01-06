@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Museum App
 
-## Getting Started
+A modern museum website built with Next.js, Prisma, and Supabase.
 
-First, run the development server:
+## Features
 
+- 🖼️ Full-stack Next.js application with API routes
+- 🗄️ PostgreSQL database with Prisma ORM
+- ☁️ Hosted on Supabase with connection pooling
+- 🎨 Modern UI with TypeScript
+- 🔒 Secure environment configuration
+
+## Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
 ```bash
+# Clone the repository
+git clone https://github.com/8-relaunch-8/the-five-doors.git
+cd museum-app
+
+# Install dependencies
+npm install
+
+# Create environment file
+cp .env.example .env
+
+# Generate Prisma client
+npx prisma generate
+
+# Push database schema
+npx prisma db push
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
+```
+src/
+├── app/           # Next.js App Router
+│   ├── api/       # API routes
+│   └── ...        # Pages and components
+├── lib/           # Utility libraries (Prisma client)
+└── ...
+prisma/
+└── schema.prisma  # Database schema
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Scripts
 
-## Learn More
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npx prisma studio` - Open Prisma database studio
 
-To learn more about Next.js, take a look at the following resources:
+## Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a `.env` file in the root directory:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```env
+PORT=3001
+NODE_ENV=development
+DATABASE_URL="your-supabase-connection-string"
+NEXT_PUBLIC_SUPABASE_URL="your-supabase-url"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
+```
 
-## Deploy on Vercel
+## API Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Health Check
+- `GET /api/health` - Service health check
+- `GET /api/` - API status
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*More endpoints coming soon...*
+
+## Database
+
+This project uses Prisma with PostgreSQL (Supabase) for data management.
+
+```bash
+# View database
+npx prisma studio
+
+# Reset database
+npx prisma db push --force-reset
+```
+
+## Deployment
+
+The easiest way to deploy is using [Vercel Platform](https://vercel.com/new).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
