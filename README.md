@@ -1,14 +1,12 @@
 # Museum App
 
-A modern museum website built with Next.js, Prisma, and Supabase.
+A museum website built with Next.js, Prisma, and Supabase.
 
 ## Features
 
-- 🖼️ Full-stack Next.js application with API routes
-- 🗄️ PostgreSQL database with Prisma ORM
-- ☁️ Hosted on Supabase with connection pooling
-- 🎨 Modern UI with TypeScript
-- 🔒 Secure environment configuration
+-  Full-stack Next.js application with API routes
+-  PostgreSQL database with Prisma ORM
+-  Hosted on Supabase with connection pooling
 
 ## Quick Start
 
@@ -69,26 +67,6 @@ NODE_ENV=development
 DATABASE_URL="your-supabase-connection-string"
 NEXT_PUBLIC_SUPABASE_URL="your-supabase-url"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
-```
-
-## API Endpoints
-
-### Health Check
-- `GET /api/health` - Service health check
-- `GET /api/` - API status
-
-*More endpoints coming soon...*
-
-## Database
-
-This project uses Prisma with PostgreSQL (Supabase) for data management.
-
-```bash
-# View database
-npx prisma studio
-
-# Reset database
-npx prisma db push --force-reset
 ```
 
 ## Deployment
