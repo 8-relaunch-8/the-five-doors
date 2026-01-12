@@ -7,10 +7,70 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ========================= ENUMS =========================
+
+enum TicketType {
+  ADULT
+  CHILD
+  STUDENT
+  SENIOR
+  GROUP        
+  FAMILY       
+  DISABLED     
+  FREE         
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+  PENDING
+}
+
+// ==================== USER MANAGEMENT ====================
+
+model User {
+  id        BigInt   @id @default(autoincrement())
+  email     String   @unique @db.VarChar(255)
+  password  String   // Hashed with bcrypt?
+  firstName String   @db.VarChar(100)
+  lastName  String   @db.VarChar(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  bookings  Booking[]
+}
+
+model Booking {
+  id           BigInt        @id @default(autoincrement())
+  userId       BigInt
+  exhibitionId BigInt
+  
+  visitDate    DateTime
+  ticketType   TicketType                    
+  quantity     Int           @default(1)
+  totalPrice   Decimal       @db.Decimal(10, 2) @default(0)
+  status       BookingStatus @default(CONFIRMED) 
+  
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // Relations
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade) //if user delete = booking delete
+  exhibition   Exhibition @relation(fields: [exhibitionId], references: [id], onDelete: Restrict) // prevent delete a booked exhibition
+
+  @@index([userId]) //speed frequent requests
+  @@index([exhibitionId])
+  @@index([visitDate])
+  @@index([status])
+}
+
+// ========================= MUSEUM CONTENT =========================
+
 model Artist {
   id        BigInt    @id @default(autoincrement())
-  name      String
-  imageUrl  String?   
+  name      String    @db.VarChar(255)
+  imageUrl  String?   @db.VarChar(500)
   birthYear Int
   deathYear Int?      
   biography String?   
@@ -23,8 +83,8 @@ model Artist {
 
 model Collection {
   id          BigInt    @id @default(autoincrement())
-  title       String
-  description String
+  title       String    @db.VarChar(255)
+  description String    @db.Text
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -34,9 +94,9 @@ model Collection {
 
 model Artwork {
   id          BigInt    @id @default(autoincrement())
-  title       String
-  description String?   
-  imageUrl    String
+  title       String    @db.VarChar(255)
+  description String?   @db.Text
+  imageUrl    String    @db.VarChar(500)
   creationYear Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -46,15 +106,18 @@ model Artwork {
   collectionId BigInt
 
   // Relations
-  artist       Artist      @relation(fields: [artistId], references: [id])
-  collection   Collection  @relation(fields: [collectionId], references: [id])
+  artist       Artist      @relation(fields: [artistId], references: [id], onDelete: Restrict)
+  collection   Collection  @relation(fields: [collectionId], references: [id], onDelete: Restrict)
   exhibitions  ExhibitionArtwork[]
+
+  @@index([artistId])
+  @@index([collectionId])
 }
 
 model Exhibition {
   id          BigInt    @id @default(autoincrement())
-  title       String
-  description String
+  title       String    @db.VarChar(255)
+  description String    @db.Text
   startDate   DateTime
   endDate     DateTime
   createdAt   DateTime  @default(now())
@@ -62,6 +125,10 @@ model Exhibition {
 
   // Many-to-many relation with Artwork via the join table
   artworks    ExhibitionArtwork[]
+  bookings    Booking[] 
+
+  @@index([startDate])
+  @@index([endDate])
 }
 
 model ExhibitionArtwork {
@@ -70,16 +137,20 @@ model ExhibitionArtwork {
   artworkId    BigInt
 
   // Relations to parent tables
-  exhibition   Exhibition @relation(fields: [exhibitionId], references: [id])
-  artwork      Artwork    @relation(fields: [artworkId], references: [id])
+  exhibition   Exhibition @relation(fields: [exhibitionId], references: [id], onDelete: Cascade)
+  artwork      Artwork    @relation(fields: [artworkId], references: [id], onDelete: Cascade)
 
   @@unique([exhibitionId, artworkId]) // composite unique key to prevent duplicates
+
+  @@index([exhibitionId])
+  @@index([artworkId])
 }
 
 model News {
-  id          BigInt   @id @default(autoincrement())
-  title       String
-  content     String
-  publishedAt DateTime
-  // No relations for the MVP
+  id          BigInt    @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  content     String    @db.Text
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
