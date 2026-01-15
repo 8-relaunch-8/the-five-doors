@@ -1,5 +1,7 @@
 # Museum App
 
+![CI](https://github.com/8-relaunch-8/the-five-doors/actions/workflows/ci.yml/badge.svg)
+
 A museum website built with Next.js, Prisma, and Supabase.
 
 ## Features
