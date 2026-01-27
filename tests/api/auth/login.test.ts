@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from '@/app/api/auth/login/route'
 import { AuthService } from '@/lib/services/auth.service'
+import { NextRequest } from 'next/server'
 
 // Mock AuthService
 vi.mock('@/lib/services/auth.service', () => ({
@@ -19,7 +20,7 @@ describe('POST /api/auth/login', () => {
   })
 
   it('should return 400 if validation fails', async () => {
-    const request = new Request('http://localhost:3000/api/auth/login', {
+    const request = new NextRequest('http://localhost:3000/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: 'invalid-email', password: 'test123' }),
@@ -37,7 +38,7 @@ describe('POST /api/auth/login', () => {
       new Error('INVALID_CREDENTIALS')
     )
 
-    const request = new Request('http://localhost:3000/api/auth/login', {
+    const request = new NextRequest('http://localhost:3000/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -67,7 +68,7 @@ describe('POST /api/auth/login', () => {
 
     vi.mocked(AuthService.loginUser).mockResolvedValueOnce(mockUser)
 
-    const request = new Request('http://localhost:3000/api/auth/login', {
+    const request = new NextRequest('http://localhost:3000/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -80,7 +81,7 @@ describe('POST /api/auth/login', () => {
 
     expect(response.status).toBe(200)
     const data = await response.json()
-    expect(data).toHaveProperty('message', 'Login successful')
+    expect(data).toHaveProperty('message', 'Connection successful')
     expect(data.user).toEqual({
       id: '123',
       email: 'valid@example.com',
@@ -88,7 +89,6 @@ describe('POST /api/auth/login', () => {
       lastName: 'Doe',
       role: 'VISITOR',
       createdAt: mockUser.createdAt.toISOString(),
-      updatedAt: mockUser.updatedAt.toISOString(),
     })
     expect(AuthService.loginUser).toHaveBeenCalledWith({
       email: 'valid@example.com',

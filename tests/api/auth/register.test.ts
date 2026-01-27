@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from '@/app/api/auth/register/route'
 import { AuthService } from '@/lib/services/auth.service'
+import { NextRequest } from 'next/server'
 
 // Mock AuthService
 vi.mock('@/lib/services/auth.service', () => ({
@@ -19,7 +20,7 @@ describe('POST /api/auth/register', () => {
   })
 
   it('should return 400 if validation fails', async () => {
-    const request = new Request('http://localhost:3000/api/auth/register', {
+    const request = new NextRequest('http://localhost:3000/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -42,7 +43,7 @@ describe('POST /api/auth/register', () => {
       new Error('EMAIL_ALREADY_EXISTS')
     )
 
-    const request = new Request('http://localhost:3000/api/auth/register', {
+    const request = new NextRequest('http://localhost:3000/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -74,7 +75,7 @@ describe('POST /api/auth/register', () => {
 
     vi.mocked(AuthService.registerUser).mockResolvedValueOnce(mockUser)
 
-    const request = new Request('http://localhost:3000/api/auth/register', {
+    const request = new NextRequest('http://localhost:3000/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
