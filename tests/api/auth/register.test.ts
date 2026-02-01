@@ -48,7 +48,8 @@ describe('POST /api/auth/register', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: 'existing@example.com',
-        password: 'Password123',
+        password: 'Password123!',
+        confirmPassword: 'Password123!',
         firstName: 'John',
         lastName: 'Doe',
       }),
@@ -80,7 +81,8 @@ describe('POST /api/auth/register', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: 'newuser@example.com',
-        password: 'Password123',
+        password: 'Password123!',
+        confirmPassword: 'Password123!',
         firstName: 'John',
         lastName: 'Doe',
       }),
@@ -102,7 +104,8 @@ describe('POST /api/auth/register', () => {
     })
     expect(AuthService.registerUser).toHaveBeenCalledWith({
       email: 'newuser@example.com',
-      password: 'Password123',
+      password: 'Password123!',
+      confirmPassword: 'Password123!',
       firstName: 'John',
       lastName: 'Doe',
     })
