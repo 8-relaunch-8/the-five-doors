@@ -1,8 +1,6 @@
-# Museum App
+# The Five Doors
 
-![CI](https://github.com/8-relaunch-8/the-five-doors/actions/workflows/ci.yml/badge.svg)
-
-A museum website built with Next.js, Prisma, and Supabase.
+A web application built with Next.js, Prisma, and Supabase.
 
 ## Features
 
@@ -18,9 +16,7 @@ A museum website built with Next.js, Prisma, and Supabase.
 
 ### Installation
 ```bash
-# Clone the repository
-git clone https://github.com/8-relaunch-8/the-five-doors.git
-cd museum-app
+cd thefivedoors
 
 # Install dependencies
 npm install

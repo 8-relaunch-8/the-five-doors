@@ -13,8 +13,8 @@ export class JWTService {
 
     return jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: this.ACCESS_TOKEN_EXPIRY,
-      issuer: 'museum-app',
-      audience: 'the-five-doors',
+      issuer: 'thefivedoors-app',
+      audience: 'thefivedoors-api',
     })
   }
 
@@ -25,8 +25,8 @@ export class JWTService {
 
     return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
       expiresIn: this.REFRESH_TOKEN_EXPIRY,
-      issuer: 'museum-app',
-      audience: 'the-five-doors',
+      issuer: 'thefivedoors-app',
+      audience: 'thefivedoors-api',
     })
   }
 
@@ -37,8 +37,8 @@ export class JWTService {
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET, {
-        issuer: 'museum-app',
-        audience: 'the-five-doors',
+        issuer: 'thefivedoors-app',
+        audience: 'thefivedoors-api',
       }) as AccessTokenPayload
 
       return decoded
@@ -61,8 +61,8 @@ export class JWTService {
     try {
       const secret = new TextEncoder().encode(process.env.JWT_REFRESH_SECRET)
       const { payload } = await jwtVerify(token, secret, {
-        issuer: 'museum-app',
-        audience: 'the-five-doors',
+        issuer: 'thefivedoors-app',
+        audience: 'thefivedoors-api',
       })
       
       if (!payload.userId || typeof payload.userId !== 'string') {

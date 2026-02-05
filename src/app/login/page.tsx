@@ -1,7 +1,7 @@
 import LoginForm from '@/components/auth/LoginForm'
 
 export const metadata = {
-  title: 'Login - Museum of Art',
+  title: 'Login - The Five Doors',
   description: 'Login to your account.',
 }
 

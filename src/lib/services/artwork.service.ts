@@ -2,13 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { CreateArtworkInput, UpdateArtworkInput } from '@/lib/validators/artwork.validator';
 import { Artwork } from '@prisma/client';
 
-/**
- * Service gérant la logique métier des artworks
- */
 class ArtworkService {
-  /**
-   * Récupérer tous les artworks avec pagination
-   */
   async findAll(page: number = 1, limit: number = 10): Promise<{ artworks: Artwork[]; total: number }> {
     const skip = (page - 1) * limit;
 
@@ -28,9 +22,6 @@ class ArtworkService {
     return { artworks, total };
   }
 
-  /**
-   * Récupérer un artwork par son ID
-   */
   async findById(id: bigint): Promise<Artwork | null> {
     return await prisma.artwork.findUnique({
       where: { id },
@@ -41,11 +32,7 @@ class ArtworkService {
     });
   }
 
-  /**
-   * Créer un nouveau artwork
-   */
   async create(data: CreateArtworkInput): Promise<Artwork> {
-    // Règle métier : Vérifier unicité (titre + artiste)
     const existing = await prisma.artwork.findFirst({
       where: {
         title: data.title,
@@ -73,18 +60,13 @@ class ArtworkService {
     });
   }
 
-  /**
-   * Modifier un artwork existant
-   */
   async update(id: bigint, data: UpdateArtworkInput): Promise<Artwork> {
-    // Vérifier que l'artwork existe
     const artwork = await this.findById(id);
     
     if (!artwork) {
       throw new Error('Artwork not found');
     }
 
-    // Si title ou artistId modifiés, vérifier l'unicité
     if (data.title || data.artistId) {
       const existing = await prisma.artwork.findFirst({
         where: {
@@ -116,18 +98,13 @@ class ArtworkService {
     });
   }
 
-  /**
-   * Supprimer un artwork
-   */
   async delete(id: bigint): Promise<Artwork> {
-    // Vérifier que l'artwork existe
     const artwork = await this.findById(id);
     
     if (!artwork) {
       throw new Error('Artwork not found');
     }
 
-    // Règle métier : Vérifier si lié à une exhibition active
     const activeExhibitions = await prisma.exhibitionArtwork.findMany({
       where: {
         artworkId: id,
@@ -147,5 +124,4 @@ class ArtworkService {
   }
 }
 
-// Export d'une instance unique (Singleton Pattern)
 export const artworkService = new ArtworkService();

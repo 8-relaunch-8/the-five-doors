@@ -1,7 +1,7 @@
 {
-  "name": "museum-app",
+  "name": "thefivedoors",
   "version": "0.1.0",
-  "description": "A modern museum website built with Next.js, Prisma, and Supabase",
+  "description": "A modern web application built with Next.js, Prisma, and Supabase",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -19,23 +19,14 @@
     "db:studio": "prisma studio",
     "db:push": "prisma db push"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/8-relaunch-8/the-five-doors.git"
-  },
   "keywords": [
     "nextjs",
     "prisma",
     "supabase",
-    "museum",
     "typescript"
   ],
   "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/8-relaunch-8/the-five-doors/issues"
-  },
-  "homepage": "https://github.com/8-relaunch-8/the-five-doors#readme",
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@supabase/auth-helpers-nextjs": "^0.15.0",

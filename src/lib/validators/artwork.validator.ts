@@ -1,9 +1,5 @@
 import { z } from 'zod';
 
-/**
- * Schéma de validation pour la création d'un artwork
- * Basé sur le schema Prisma
- */
 export const CreateArtworkSchema = z.object({
   title: z
     .string()
@@ -37,14 +33,7 @@ export const CreateArtworkSchema = z.object({
     .positive('Collection ID must be positive')
 });
 
-/**
- * Schéma de validation pour la modification d'un artwork
- * Tous les champs sont optionnels (PATCH partiel)
- */
 export const UpdateArtworkSchema = CreateArtworkSchema.partial();
 
-/**
- * Types TypeScript inférés des schémas Zod
- */
 export type CreateArtworkInput = z.infer<typeof CreateArtworkSchema>;
 export type UpdateArtworkInput = z.infer<typeof UpdateArtworkSchema>;

@@ -1,7 +1,7 @@
 import RegisterForm from '@/components/auth/RegisterForm'
 
 export const metadata = {
-  title: 'Register - Museum of Art',
+  title: 'Register - The Five Doors',
   description: 'Create your account',
 }
 

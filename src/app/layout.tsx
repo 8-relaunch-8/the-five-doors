@@ -11,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Museum of Art",
-  description: "Discover our contemporary art collection",
+  title: "The Five Doors",
+  description: "Discover our collection",
 };
 
 export default function RootLayout({
