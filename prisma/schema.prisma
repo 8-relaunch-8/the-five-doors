@@ -73,7 +73,7 @@ model Booking {
   @@index([status])
 }
 
-// ========================= MUSEUM CONTENT =========================
+// ========================= CONTENT =========================
 
 model Artist {
   id        BigInt    @id @default(autoincrement())
