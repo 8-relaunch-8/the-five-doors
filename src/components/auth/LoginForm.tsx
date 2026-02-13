@@ -38,7 +38,9 @@ export default function LoginForm() {
     try {
       await login(validation.data)
       logger.info('✅ Login successful')
-      router.push('/profile')
+      // Use replace instead of push to avoid back button issues
+      router.replace('/profile')
+      router.refresh() // Force Next.js to revalidate Server Components
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Login failed'
       setError(errorMessage)

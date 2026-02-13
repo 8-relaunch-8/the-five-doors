@@ -1,76 +1,75 @@
 # The Five Doors
 
-A web application built with Next.js, Prisma, and Supabase.
+Full-stack museum web application with Next.js, Prisma, and Supabase.
 
-## Features
+## Getting Started
 
--  Full-stack Next.js application with API routes
--  PostgreSQL database with Prisma ORM
--  Hosted on Supabase with connection pooling
-
-## Quick Start
-
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-
-### Installation
 ```bash
-cd thefivedoors
-
-# Install dependencies
 npm install
-
-# Create environment file
 cp .env.example .env
-
-# Generate Prisma client
 npx prisma generate
-
-# Push database schema
 npx prisma db push
-
-# Start development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Project Structure
+## Tech Stack
+
+- Next.js 14 (App Router)
+- TypeScript
+- Prisma ORM
+- Supabase (PostgreSQL)
+- Tailwind CSS
+- JWT Authentication
+
+## Scripts
+
+```bash
+npm run dev          # Development server
+npm run build        # Production build
+npm run start        # Production server
+npx prisma studio    # Database GUI
+npx prisma migrate   # Run migrations
 ```
-src/
-├── app/           # Next.js App Router
-│   ├── api/       # API routes
-│   └── ...        # Pages and components
-├── lib/           # Utility libraries (Prisma client)
-└── ...
-prisma/
-└── schema.prisma  # Database schema
-```
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npx prisma studio` - Open Prisma database studio
 
 ## Environment Variables
 
-Create a `.env` file in the root directory:
+Copy `.env.example` to `.env` and fill in your values:
 
 ```env
-PORT=3001
-NODE_ENV=development
-DATABASE_URL="your-supabase-connection-string"
-NEXT_PUBLIC_SUPABASE_URL="your-supabase-url"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
+DATABASE_URL="postgresql://..."
+DIRECT_URL="postgresql://..."
+NEXT_PUBLIC_SUPABASE_URL="https://..."
+NEXT_PUBLIC_SUPABASE_ANON_KEY="..."
+SUPABASE_SERVICE_ROLE_KEY="..."
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+JWT_SECRET="..."
+JWT_REFRESH_SECRET="..."
 ```
 
-## Deployment
+Generate JWT secrets: `openssl rand -hex 64`
 
-The easiest way to deploy is using [Vercel Platform](https://vercel.com/new).
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── api/              # API routes
+│   ├── admin/            # Admin pages
+│   └── ...               # Public pages
+├── components/           # React components
+├── contexts/             # React contexts
+├── lib/
+│   ├── services/         # Business logic
+│   ├── validators/       # Zod schemas
+│   └── middleware/       # Auth helpers
+└── types/                # TypeScript types
+
+prisma/
+└── schema.prisma         # Database schema
+```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT

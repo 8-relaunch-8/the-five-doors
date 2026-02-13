@@ -1,7 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { artworkService } from '@/lib/services/artwork.service';
+import { requireAuth } from '@/lib/middleware/auth.middleware';
 import { CreateArtworkSchema } from '@/lib/validators/artwork.validator';
 import { logger } from '@/lib/utils/logger';
+
+const STAFF_ROLES = new Set(['ADMIN', 'STAFF']);
+
+async function requireStaffOrAdmin(request: NextRequest) {
+  try {
+    const payload = await requireAuth(request);
+    if (!STAFF_ROLES.has(payload.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden' },
+        { status: 403 }
+      );
+    }
+    return null;
+  } catch {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 401 }
+    );
+  }
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -43,6 +64,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const authError = await requireStaffOrAdmin(request);
+    if (authError) return authError;
+
     const body = await request.json();
     const validatedData = CreateArtworkSchema.parse(body);
     const artwork = await artworkService.create(validatedData);

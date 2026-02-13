@@ -3,15 +3,6 @@ import type { NextRequest } from 'next/server'
 import { jwtVerify } from 'jose'
 import { logger } from '@/lib/utils/logger'
 
-/**
- * Next.js Middleware - Route Protection
- * 
- * Executes BEFORE each request to:
- * - Verify authentication
- * - Redirect if necessary
- * - Control permissions (ADMIN, STAFF, VISITOR)
- */
-
 const publicRoutes = [
   '/',
   '/login',
@@ -36,7 +27,7 @@ export async function middleware(request: NextRequest) {
 
   logger.info(`[Middleware] ${request.method} ${pathname}`)
 
-  const token = request.cookies.get('refreshToken')?.value
+  const token = request.cookies.get('accessToken')?.value // ← CHANGÉ : accessToken
 
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
   const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route))
@@ -55,21 +46,22 @@ export async function middleware(request: NextRequest) {
 
   // Token exists → verify it
   try {
-    const secret = new TextEncoder().encode(process.env.JWT_REFRESH_SECRET!)
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET!) // ← CHANGÉ : JWT_SECRET
     const { payload } = await jwtVerify(token, secret)
     const userRole = payload.role as string
 
     logger.info(`[Middleware] ✅ Token valid, user role: ${userRole}`)
 
-    // Authenticated user on auth pages → redirect to home
+        // Authenticated user on auth pages → allow (client will handle redirect)
     if (isAuthRoute) {
-      logger.info(`[Middleware] ➡️ Already authenticated, redirecting to /`)
-      return NextResponse.redirect(new URL('/', request.url))
+      logger.info(`[Middleware] ⚠️ Authenticated user on auth route: ${pathname}`)
+      // Let client-side handle redirect to avoid race conditions
+      return NextResponse.next()
     }
 
-    // Admin route check
-    if (isAdminRoute && userRole !== 'ADMIN') {
-      logger.info(`[Middleware] ❌ Not ADMIN, redirecting to /`)
+    // Admin route check (ADMIN or STAFF)
+    if (isAdminRoute && userRole !== 'ADMIN' && userRole !== 'STAFF') {
+      logger.info(`[Middleware] ❌ Not ADMIN/STAFF, redirecting to /`)
       return NextResponse.redirect(new URL('/', request.url))
     }
 
@@ -78,12 +70,9 @@ export async function middleware(request: NextRequest) {
   } catch (error) {
     logger.error(`[Middleware] ❌ Invalid token:`, error)
     
-    // Token invalid → delete cookies and handle appropriately
     const response = isProtectedRoute || isAdminRoute
       ? NextResponse.redirect(new URL('/login', request.url))
-      : isAuthRoute  // ← FIX: If we're on /login with invalid token
-        ? NextResponse.next()  // ← Allow access to /login
-        : NextResponse.next()
+      : NextResponse.next()
     
     response.cookies.delete('refreshToken')
     response.cookies.delete('accessToken')

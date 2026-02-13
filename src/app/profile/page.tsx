@@ -6,7 +6,7 @@ import ProfileClient from './ProfileClient'
 // SERVER COMPONENT (not 'use client')
 export default async function ProfilePage() {
   const cookieStore = await cookies()
-  const token = cookieStore.get('refreshToken')?.value
+  const token = cookieStore.get('accessToken')?.value
 
   // Protection: no token → redirect
   if (!token) {
@@ -16,7 +16,7 @@ export default async function ProfilePage() {
   // Verify token
   let userData
   try {
-    const secret = new TextEncoder().encode(process.env.JWT_REFRESH_SECRET!)
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
     await jwtVerify(token, secret)
   } catch (error) {
     // Invalid token → redirect
@@ -25,9 +25,9 @@ export default async function ProfilePage() {
 
   // Fetch user data
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/profile`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/auth/profile`, {
       headers: {
-        Cookie: `refreshToken=${token}`,
+        Cookie: `accessToken=${token}`,
       },
       cache: 'no-store',
     })
