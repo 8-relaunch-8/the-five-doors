@@ -1,18 +1,19 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { cookies } from 'next/headers';
+import Link from "next/link";
+import Image from "next/image";
+import { cookies, headers } from "next/headers";
+import DeleteArtworkButton from "@/components/artworks/DeleteArtworkButton";
 
 interface Artwork {
   id: string;
   title: string;
   imageUrl: string | null;
-  year: number | null;
+  creationYear: number | null;
   artist: { name: string } | null;
 }
 
 interface ApiResponse {
   data: Artwork[];
-  pagination: {
+  meta: {
     total: number;
     page: number;
     limit: number;
@@ -20,20 +21,60 @@ interface ApiResponse {
   };
 }
 
+function getFallback(page: number): ApiResponse {
+  return {
+    data: [],
+    meta: { total: 0, page, limit: 10, totalPages: 1 },
+  };
+}
+
 async function getArtworks(page: number = 1): Promise<ApiResponse> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('accessToken')?.value;
+  const safePage = Number.isInteger(page) && page > 0 ? page : 1;
+  const fallback = getFallback(safePage);
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/artworks?page=${page}&limit=10`,
-    {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("accessToken")?.value;
+
+    const h = await headers();
+    const host = h.get("x-forwarded-host") ?? h.get("host");
+    const protocol = h.get("x-forwarded-proto") ?? "http";
+
+    const baseUrl =
+      process.env.NEXT_PUBLIC_APP_URL ??
+      (host ? `${protocol}://${host}` : "http://localhost:3000");
+
+    const params = new URLSearchParams({
+      page: String(safePage),
+      limit: "10",
+    });
+
+    const url = `${baseUrl}/api/artworks?${params.toString()}`;
+
+    const res = await fetch(url, {
       headers: token ? { Cookie: `accessToken=${token}` } : {},
-      cache: 'no-store',
-    }
-  );
+      cache: "no-store",
+    });
 
-  if (!res.ok) throw new Error('Failed to fetch artworks');
-  return res.json();
+    if (!res.ok) return fallback;
+
+    const contentType = res.headers.get("content-type") ?? "";
+    if (!contentType.includes("application/json")) return fallback;
+
+    const json = (await res.json()) as Partial<ApiResponse>;
+
+    return {
+      data: Array.isArray(json.data) ? json.data : [],
+      meta: {
+        total: json.meta?.total ?? 0,
+        page: json.meta?.page ?? safePage,
+        limit: json.meta?.limit ?? 10,
+        totalPages: Math.max(1, json.meta?.totalPages ?? 1),
+      },
+    };
+  } catch {
+    return fallback;
+  }
 }
 
 export default async function ArtworksPage({
@@ -42,77 +83,78 @@ export default async function ArtworksPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const params = await searchParams;
-  const page = Number(params.page) || 1;
-  const { data: artworks, pagination } = await getArtworks(page);
+  const parsedPage = Number(params.page);
+  const page = Number.isInteger(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+
+  const { data: artworks, meta } = await getArtworks(page);
 
   return (
     <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Artworks</h1>
         <Link
           href="/admin/artworks/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
-          + Créer
+          + Create
         </Link>
       </div>
 
       {artworks.length === 0 ? (
-        <p className="text-gray-500">Aucun artwork trouvé.</p>
+        <p className="text-gray-500">No artworks found.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {artworks.map((artwork) => (
-            <div key={artwork.id} className="border rounded-lg p-4 shadow">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {artworks.map((artwork, index) => (
+            <div key={artwork.id} className="rounded-lg border p-4 shadow">
               {artwork.imageUrl && (
                 <Image
                   src={artwork.imageUrl}
                   alt={artwork.title}
                   width={400}
                   height={300}
-                  className="w-full h-48 object-cover rounded mb-4"
+                  className="mb-4 h-48 w-full rounded object-cover"
+                  priority={index < 2}
                 />
               )}
-              <h2 className="text-xl font-semibold mb-2">{artwork.title}</h2>
-              <p className="text-gray-600 mb-1">
-                {artwork.artist?.name || 'Artiste inconnu'}
+              <h2 className="mb-2 text-xl font-semibold">{artwork.title}</h2>
+              <p className="mb-1 text-gray-600">
+                {artwork.artist?.name || "Unknown artist"}
               </p>
-              <p className="text-gray-500 text-sm mb-4">
-                {artwork.year || 'Année inconnue'}
+              <p className="mb-4 text-sm text-gray-500">
+                {artwork.creationYear ?? "Unknown year"}
               </p>
               <div className="flex gap-2">
                 <Link
                   href={`/admin/artworks/${artwork.id}/edit`}
                   className="text-blue-600 hover:underline"
                 >
-                  Éditer
+                  Edit
                 </Link>
-                <button className="text-red-600 hover:underline">
-                  Supprimer
-                </button>
+                <DeleteArtworkButton artworkId={artwork.id} />
               </div>
             </div>
           ))}
         </div>
       )}
 
-      <div className="flex justify-center gap-2 mt-8">
+      <div className="mt-8 flex justify-center gap-2">
         {page > 1 && (
           <Link
             href={`/admin/artworks?page=${page - 1}`}
-            className="px-4 py-2 border rounded hover:bg-gray-100"
+            className="rounded border px-4 py-2 hover:bg-gray-100"
           >
-            Précédent
+            Previous
           </Link>
         )}
         <span className="px-4 py-2">
-          Page {pagination.page} / {pagination.totalPages}
+          Page {meta.page} / {meta.totalPages}
         </span>
-        {page < pagination.totalPages && (
+        {page < meta.totalPages && (
           <Link
             href={`/admin/artworks?page=${page + 1}`}
-            className="px-4 py-2 border rounded hover:bg-gray-100"
+            className="rounded border px-4 py-2 hover:bg-gray-100"
           >
-            Suivant
+            Next
           </Link>
         )}
       </div>

@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
 
   logger.info(`[Middleware] ${request.method} ${pathname}`)
 
-  const token = request.cookies.get('accessToken')?.value // ← CHANGÉ : accessToken
+  const token = request.cookies.get('accessToken')?.value
 
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
   const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route))
@@ -46,17 +46,19 @@ export async function middleware(request: NextRequest) {
 
   // Token exists → verify it
   try {
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET!) // ← CHANGÉ : JWT_SECRET
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
     const { payload } = await jwtVerify(token, secret)
     const userRole = payload.role as string
 
     logger.info(`[Middleware] ✅ Token valid, user role: ${userRole}`)
 
-        // Authenticated user on auth pages → allow (client will handle redirect)
+    // Authenticated user on auth pages → redirect
     if (isAuthRoute) {
       logger.info(`[Middleware] ⚠️ Authenticated user on auth route: ${pathname}`)
-      // Let client-side handle redirect to avoid race conditions
-      return NextResponse.next()
+      const redirectUrl = userRole === 'ADMIN' || userRole === 'STAFF'
+        ? '/admin/artworks'
+        : '/profile'
+      return NextResponse.redirect(new URL(redirectUrl, request.url))
     }
 
     // Admin route check (ADMIN or STAFF)
