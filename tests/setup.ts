@@ -1,11 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
-// Configuration globale pour tous les tests
-if (!global.fetch) {
-  global.fetch = require('node-fetch')
-}
-
-// Mock des variables d'environnement pour les tests
+// Mock environment variables for tests
 process.env = {
   ...process.env,
   NODE_ENV: 'test',

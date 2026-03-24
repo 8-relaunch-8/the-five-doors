@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cookies, headers } from "next/headers";
 import DeleteArtworkButton from "@/components/artworks/DeleteArtworkButton";
+import SuccessToast from "@/components/ui/SuccessToast";
 
 interface Artwork {
   id: string;
@@ -89,9 +90,9 @@ export default async function ArtworksPage({
   const { data: artworks, meta } = await getArtworks(page);
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto px-4 py-6 sm:px-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Artworks</h1>
+        <h1 className="text-2xl font-bold sm:text-3xl">Artworks</h1>
         <Link
           href="/admin/artworks/new"
           className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
@@ -99,6 +100,8 @@ export default async function ArtworksPage({
           + Create
         </Link>
       </div>
+
+      <SuccessToast />
 
       {artworks.length === 0 ? (
         <p className="text-gray-500">No artworks found.</p>

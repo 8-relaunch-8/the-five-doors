@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 type Props = {
   artworkId: string;
@@ -9,13 +10,11 @@ type Props = {
 
 export default function DeleteArtworkButton({ artworkId }: Props) {
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleDelete() {
-    const confirmed = window.confirm("Are you sure you want to delete this artwork?");
-    if (!confirmed) return;
-
     setIsDeleting(true);
     setError(null);
 
@@ -28,12 +27,15 @@ export default function DeleteArtworkButton({ artworkId }: Props) {
       if (!res.ok) {
         const body = await res.json().catch(() => null);
         setError(body?.error ?? "Failed to delete artwork.");
+        setIsModalOpen(false);  
         return;
       }
 
-      router.refresh();
+      setIsModalOpen(false);
+      router.push("/admin/artworks?success=deleted");
     } catch {
       setError("Network error. Please try again.");
+      setIsModalOpen(false);  
     } finally {
       setIsDeleting(false);
     }
@@ -43,13 +45,22 @@ export default function DeleteArtworkButton({ artworkId }: Props) {
     <div className="flex flex-col">
       <button
         type="button"
-        onClick={handleDelete}
-        disabled={isDeleting}
-        className="text-red-600 hover:underline disabled:opacity-50"
+        onClick={() => setIsModalOpen(true)}
+        className="text-red-600 hover:underline"
       >
-        {isDeleting ? "Deleting..." : "Delete"}
+        Delete
       </button>
+
       {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+
+      <ConfirmModal
+        isOpen={isModalOpen}
+        title="Delete Artwork"
+        message="This action is irreversible. Are you sure you want to delete this artwork?"
+        onConfirm={handleDelete}
+        onCancel={() => setIsModalOpen(false)}
+        isLoading={isDeleting}
+      />
     </div>
   );
 }

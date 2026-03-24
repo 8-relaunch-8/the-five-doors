@@ -31,7 +31,6 @@ export default function ArtworkCreateForm() {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   function onChange<K extends keyof FormValues>(key: K, value: FormValues[K]) {
     setValues((prev) => ({ ...prev, [key]: value }));
@@ -41,7 +40,6 @@ export default function ArtworkCreateForm() {
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setApiError(null);
-    setSuccess(false);
 
     const payload = {
       ...values,
@@ -55,19 +53,19 @@ export default function ArtworkCreateForm() {
 
     const parsed = CreateArtworkSchema.safeParse(payload);
 
-        if (!parsed.success) {
-    const errors = parsed.error.flatten().fieldErrors;
+    if (!parsed.success) {
+      const errors = parsed.error.flatten().fieldErrors;
 
-    setFieldErrors({
+      setFieldErrors({
         ...(errors.title?.[0] ? { title: errors.title[0] } : {}),
         ...(errors.description?.[0] ? { description: errors.description[0] } : {}),
         ...(errors.imageUrl?.[0] ? { imageUrl: errors.imageUrl[0] } : {}),
         ...(errors.creationYear?.[0] ? { creationYear: errors.creationYear[0] } : {}),
         ...(errors.artistId?.[0] ? { artistId: errors.artistId[0] } : {}),
         ...(errors.collectionId?.[0] ? { collectionId: errors.collectionId[0] } : {}),
-    });
+      });
 
-    return;
+      return;
     }
 
     try {
@@ -85,8 +83,7 @@ export default function ArtworkCreateForm() {
         return;
       }
 
-      setSuccess(true);
-      router.push("/admin/artworks");
+      router.push("/admin/artworks?success=created");
       router.refresh();
     } catch {
       setApiError("Erreur réseau. Réessaie dans quelques secondes.");
@@ -98,8 +95,9 @@ export default function ArtworkCreateForm() {
   return (
     <form onSubmit={onSubmit} className="max-w-2xl space-y-4">
       <div>
-        <label className="mb-1 block text-sm font-medium">Titre</label>
+        <label htmlFor="title" className="mb-1 block text-sm font-medium">Titre</label>
         <input
+          id="title"
           className="w-full rounded border px-3 py-2"
           value={values.title}
           onChange={(e) => onChange("title", e.target.value)}
@@ -108,8 +106,9 @@ export default function ArtworkCreateForm() {
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Description</label>
+        <label htmlFor="description" className="mb-1 block text-sm font-medium">Description</label>
         <textarea
+          id="description"
           className="w-full rounded border px-3 py-2"
           rows={4}
           value={values.description}
@@ -119,8 +118,9 @@ export default function ArtworkCreateForm() {
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Image URL</label>
+        <label htmlFor="imageUrl" className="mb-1 block text-sm font-medium">Image URL</label>
         <input
+          id="imageUrl"
           className="w-full rounded border px-3 py-2"
           value={values.imageUrl}
           onChange={(e) => onChange("imageUrl", e.target.value)}
@@ -130,8 +130,9 @@ export default function ArtworkCreateForm() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div>
-          <label className="mb-1 block text-sm font-medium">Année</label>
+          <label htmlFor="creationYear" className="mb-1 block text-sm font-medium">Année</label>
           <input
+            id="creationYear"
             className="w-full rounded border px-3 py-2"
             value={values.creationYear}
             onChange={(e) => onChange("creationYear", e.target.value)}
@@ -140,8 +141,9 @@ export default function ArtworkCreateForm() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Artist ID</label>
+          <label htmlFor="artistId" className="mb-1 block text-sm font-medium">Artist ID</label>
           <input
+            id="artistId"
             className="w-full rounded border px-3 py-2"
             value={values.artistId}
             onChange={(e) => onChange("artistId", e.target.value)}
@@ -150,8 +152,9 @@ export default function ArtworkCreateForm() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Collection ID</label>
+          <label htmlFor="collectionId" className="mb-1 block text-sm font-medium">Collection ID</label>
           <input
+            id="collectionId"
             className="w-full rounded border px-3 py-2"
             value={values.collectionId}
             onChange={(e) => onChange("collectionId", e.target.value)}
@@ -161,7 +164,6 @@ export default function ArtworkCreateForm() {
       </div>
 
       {apiError && <p className="text-sm text-red-600">{apiError}</p>}
-      {success && <p className="text-sm text-green-600">Artwork créé avec succès.</p>}
 
       <button
         type="submit"

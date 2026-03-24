@@ -4,6 +4,7 @@ import { artworkService } from '@/lib/services/artwork.service';
 import { requireAuth } from '@/lib/middleware/auth.middleware';
 import { UpdateArtworkSchema } from '@/lib/validators/artwork.validator';
 import { logger } from '@/lib/utils/logger';
+import { toJsonSafe } from '@/lib/utils/json';
 
 const STAFF_ROLES = new Set(['ADMIN', 'STAFF']);
 
@@ -42,7 +43,7 @@ export async function GET(
     if (!artwork) {
       return NextResponse.json({ error: 'Artwork not found' }, { status: 404 });
     }
-    return NextResponse.json({ data: artwork });
+    return NextResponse.json({ data: toJsonSafe(artwork) });
   } catch (error) {
     logger.error('Error fetching artwork:', error);
     return NextResponse.json({ error: 'Failed to fetch artwork' }, { status: 500 });
@@ -65,7 +66,7 @@ export async function PUT(
     const validatedData = UpdateArtworkSchema.parse(body);
     const artwork = await artworkService.update(id, validatedData);
     logger.info('Artwork updated:', id);
-    return NextResponse.json({ data: artwork });
+    return NextResponse.json({ data: toJsonSafe(artwork) });
   } catch (error: any) {
     if (error.name === 'ZodError') {
       return NextResponse.json({ error: 'Validation failed', details: error.errors }, { status: 400 });
@@ -97,7 +98,7 @@ export async function PATCH(
     const validatedData = UpdateArtworkSchema.parse(body);
     const artwork = await artworkService.update(id, validatedData);
     logger.info('Artwork patched:', id);
-    return NextResponse.json({ data: artwork });
+    return NextResponse.json({ data: toJsonSafe(artwork) });
   } catch (error: any) {
     if (error.name === 'ZodError') {
       return NextResponse.json({ error: 'Validation failed', details: error.errors }, { status: 400 });

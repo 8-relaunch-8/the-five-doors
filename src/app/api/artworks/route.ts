@@ -5,14 +5,9 @@ import { artworkService } from '@/lib/services/artwork.service';
 import { requireAuth } from '@/lib/middleware/auth.middleware';
 import { CreateArtworkSchema } from '@/lib/validators/artwork.validator';
 import { logger } from '@/lib/utils/logger';
+import { toJsonSafe } from '@/lib/utils/json';
 
 const STAFF_ROLES = new Set(['ADMIN', 'STAFF']);
-
-function toJsonSafe<T>(value: T): T {
-  return JSON.parse(
-    JSON.stringify(value, (_, v) => (typeof v === 'bigint' ? v.toString() : v))
-  ) as T;
-}
 
 async function requireStaffOrAdmin(request: NextRequest) {
   try {
