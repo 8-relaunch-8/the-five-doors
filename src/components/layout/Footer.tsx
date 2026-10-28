@@ -44,9 +44,9 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-bold mb-4">Contact</h3>
             <ul className="space-y-2 text-gray-400 text-sm">
-              <li>📍 123 Rue de l&apos;Art, Paris</li>
-              <li>📞 +33 1 23 45 67 89</li>
-              <li>✉️ contact@musee-art.fr</li>
+              <li>📍 1 Example Street, Example City</li>
+              <li>📞 +00 0 00 00 00 00</li>
+              <li>✉️ contact@example.com</li>
               <li className="pt-2">
                 Open Tuesday to Sunday<br />
                 10am - 6pm
