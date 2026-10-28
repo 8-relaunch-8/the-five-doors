@@ -25,7 +25,7 @@ async function main() {
       prisma.collection.create({
         data: {
           title: faker.word.words({ count: { min: 1, max: 3 } }), // name -> title
-          description: faker.lorem.sentence(), // obligatoire
+          description: faker.lorem.sentence(), // required
         },
       })
     )
@@ -49,7 +49,7 @@ async function main() {
     })
   );
 
-  console.log("✅ Seed terminé");
+  console.log("✅ Seed complete");
 }
 
 main()

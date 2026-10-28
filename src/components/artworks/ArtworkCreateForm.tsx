@@ -79,14 +79,14 @@ export default function ArtworkCreateForm() {
 
       if (!res.ok) {
         const body = await res.json().catch(() => null);
-        setApiError(body?.error ?? "Erreur lors de la création de l'artwork.");
+        setApiError(body?.error ?? "Error while creating the artwork.");
         return;
       }
 
       router.push("/admin/artworks?success=created");
       router.refresh();
     } catch {
-      setApiError("Erreur réseau. Réessaie dans quelques secondes.");
+      setApiError("Network error. Please try again in a few seconds.");
     } finally {
       setIsSubmitting(false);
     }
@@ -95,7 +95,7 @@ export default function ArtworkCreateForm() {
   return (
     <form onSubmit={onSubmit} className="max-w-2xl space-y-4">
       <div>
-        <label htmlFor="title" className="mb-1 block text-sm font-medium">Titre</label>
+        <label htmlFor="title" className="mb-1 block text-sm font-medium">Title</label>
         <input
           id="title"
           className="w-full rounded border px-3 py-2"
@@ -130,7 +130,7 @@ export default function ArtworkCreateForm() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div>
-          <label htmlFor="creationYear" className="mb-1 block text-sm font-medium">Année</label>
+          <label htmlFor="creationYear" className="mb-1 block text-sm font-medium">Creation Year</label>
           <input
             id="creationYear"
             className="w-full rounded border px-3 py-2"
@@ -170,7 +170,7 @@ export default function ArtworkCreateForm() {
         disabled={isSubmitting}
         className="rounded bg-black px-4 py-2 text-white disabled:opacity-50"
       >
-        {isSubmitting ? "Création..." : "Créer l'artwork"}
+        {isSubmitting ? "Creating..." : "Create artwork"}
       </button>
     </form>
   );

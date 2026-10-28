@@ -26,7 +26,7 @@ describe("SuccessToast", () => {
   it("renders nothing when there is no success param", () => {
     render(<SuccessToast />);
 
-    expect(screen.queryByText(/succès/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/successfully/)).not.toBeInTheDocument();
   });
 
   // --- Test 2: Displays the correct message for ?success=created ---
@@ -35,7 +35,7 @@ describe("SuccessToast", () => {
 
     render(<SuccessToast />);
 
-    expect(screen.getByText("Artwork créé avec succès.")).toBeInTheDocument();
+    expect(screen.getByText("Artwork created successfully.")).toBeInTheDocument();
   });
 
   // --- Test 3: Displays the correct message for ?success=updated ---
@@ -44,7 +44,7 @@ describe("SuccessToast", () => {
 
     render(<SuccessToast />);
 
-    expect(screen.getByText("Artwork mis à jour avec succès.")).toBeInTheDocument();
+    expect(screen.getByText("Artwork updated successfully.")).toBeInTheDocument();
   });
 
   // --- Test 4: Displays the correct message for ?success=deleted ---
@@ -53,7 +53,7 @@ describe("SuccessToast", () => {
 
     render(<SuccessToast />);
 
-    expect(screen.getByText("Artwork supprimé avec succès.")).toBeInTheDocument();
+    expect(screen.getByText("Artwork deleted successfully.")).toBeInTheDocument();
   });
 
   // --- Test 5: Renders nothing for an unknown success value ---
@@ -62,7 +62,7 @@ describe("SuccessToast", () => {
 
     render(<SuccessToast />);
 
-    expect(screen.queryByText(/succès/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/successfully/)).not.toBeInTheDocument();
   });
 
   // --- Test 6: Cleans the URL by calling router.replace ---
@@ -83,14 +83,14 @@ describe("SuccessToast", () => {
     mockSearchParams = new URLSearchParams("success=deleted");
 
     render(<SuccessToast />);
-    expect(screen.getByText("Artwork supprimé avec succès.")).toBeInTheDocument();
+    expect(screen.getByText("Artwork deleted successfully.")).toBeInTheDocument();
 
     // Fast-forward 3 seconds
     act(() => {
       vi.advanceTimersByTime(3000);
     });
 
-    expect(screen.queryByText("Artwork supprimé avec succès.")).not.toBeInTheDocument();
+    expect(screen.queryByText("Artwork deleted successfully.")).not.toBeInTheDocument();
   });
 
   // --- Test 8: Still visible before 3 seconds ---
@@ -104,6 +104,6 @@ describe("SuccessToast", () => {
       vi.advanceTimersByTime(2000);
     });
 
-    expect(screen.getByText("Artwork créé avec succès.")).toBeInTheDocument();
+    expect(screen.getByText("Artwork created successfully.")).toBeInTheDocument();
   });
 });

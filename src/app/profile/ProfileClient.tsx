@@ -1,6 +1,6 @@
 'use client'
 
-import Button from '@/components/ui/Button'  // ← Ton composant existant
+import Button from '@/components/ui/Button'  // ← Your existing component
 
 interface User {
   email: string

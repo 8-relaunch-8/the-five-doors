@@ -41,7 +41,7 @@ export function Header() {
 
             {!isLoading && isAuthenticated && user && (
               <div className="flex items-center gap-4">
-                {/* 🆕 Lien vers le profil */}
+                {/* 🆕 Link to the profile */}
                 <Link href="/profile">
                   <span className="text-gray-700 hover:text-gray-900 transition-colors cursor-pointer">
                     Hello, <span className="font-semibold">{user.firstName}</span>

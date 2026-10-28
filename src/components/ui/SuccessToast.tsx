@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const messages: Record<string, string> = {
-  deleted: "Artwork supprimé avec succès.",
-  created: "Artwork créé avec succès.",
-  updated: "Artwork mis à jour avec succès.",
+  deleted: "Artwork deleted successfully.",
+  created: "Artwork created successfully.",
+  updated: "Artwork updated successfully.",
 };
 
 export default function SuccessToast() {
@@ -22,12 +22,12 @@ export default function SuccessToast() {
   useEffect(() => {
     if (!initialText) return;
 
-    // Nettoyer l'URL
+    // Clean up the URL
     const url = new URL(window.location.href);
     url.searchParams.delete("success");
     router.replace(url.pathname + url.search, { scroll: false });
 
-    // Auto-dismiss après 3 secondes
+    // Auto-dismiss after 3 seconds
     const timer = setTimeout(() => setVisible(false), 3000);
     return () => clearTimeout(timer);
   }, [initialText, router]);

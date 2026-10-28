@@ -9,9 +9,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
           <div>
-            <h3 className="text-lg font-bold mb-4">Musée d&apos;Art</h3>
+            <h3 className="text-lg font-bold mb-4">Art Museum</h3>
             <p className="text-gray-400 text-sm">
-              Découvrez nos collections.
+              Discover our collections.
             </p>
           </div>
 
@@ -20,22 +20,22 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link href="/" className="text-gray-400 hover:text-white transition-colors">
-                  Accueil
+                  Home
                 </Link>
               </li>
               <li>
                 <Link href="/exhibitions" className="text-gray-400 hover:text-white transition-colors">
-                  Expositions
+                  Exhibitions
                 </Link>
               </li>
               <li>
                 <Link href="/artworks" className="text-gray-400 hover:text-white transition-colors">
-                  Œuvres
+                  Artworks
                 </Link>
               </li>
               <li>
                 <Link href="/bookings" className="text-gray-400 hover:text-white transition-colors">
-                  Réserver
+                  Book
                 </Link>
               </li>
             </ul>
@@ -48,15 +48,15 @@ export function Footer() {
               <li>📞 +33 1 23 45 67 89</li>
               <li>✉️ contact@musee-art.fr</li>
               <li className="pt-2">
-                Ouvert du mardi au dimanche<br />
-                10h - 18h
+                Open Tuesday to Sunday<br />
+                10am - 6pm
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>&copy; 2026 Musée d&apos;Art. Tous droits réservés.</p>
+          <p>&copy; 2026 Art Museum. All rights reserved.</p>
         </div>
       </div>
     </footer>

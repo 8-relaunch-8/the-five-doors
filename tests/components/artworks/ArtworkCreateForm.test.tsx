@@ -17,9 +17,9 @@ global.fetch = mockFetch;
 // --- Helper: fill the form with valid data ---
 function fillForm(overrides: Partial<Record<string, string>> = {}) {
   const fields: Record<string, string> = {
-    Titre: "Mona Lisa",
+    Title: "Mona Lisa",
     "Image URL": "https://example.com/mona.jpg",
-    Année: "1503",
+    "Creation Year": "1503",
     "Artist ID": "1",
     "Collection ID": "2",
     ...overrides,
@@ -40,20 +40,20 @@ describe("ArtworkCreateForm", () => {
   it("renders all form fields and the submit button", () => {
     render(<ArtworkCreateForm />);
 
-    expect(screen.getByLabelText("Titre")).toBeInTheDocument();
+    expect(screen.getByLabelText("Title")).toBeInTheDocument();
     expect(screen.getByLabelText("Description")).toBeInTheDocument();
     expect(screen.getByLabelText("Image URL")).toBeInTheDocument();
-    expect(screen.getByLabelText("Année")).toBeInTheDocument();
+    expect(screen.getByLabelText("Creation Year")).toBeInTheDocument();
     expect(screen.getByLabelText("Artist ID")).toBeInTheDocument();
     expect(screen.getByLabelText("Collection ID")).toBeInTheDocument();
-    expect(screen.getByText("Créer l'artwork")).toBeInTheDocument();
+    expect(screen.getByText("Create artwork")).toBeInTheDocument();
   });
 
   // --- Test 2: Shows Zod validation errors on empty submit ---
   it("displays validation errors when submitting an empty form", async () => {
     render(<ArtworkCreateForm />);
 
-    fireEvent.click(screen.getByText("Créer l'artwork"));
+    fireEvent.click(screen.getByText("Create artwork"));
 
     await waitFor(() => {
       expect(screen.getByText("Title is required")).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe("ArtworkCreateForm", () => {
 
     fillForm({ "Image URL": "not-a-url" });
 
-    fireEvent.click(screen.getByText("Créer l'artwork"));
+    fireEvent.click(screen.getByText("Create artwork"));
 
     await waitFor(() => {
       expect(screen.getByText("Image URL must be a valid URL")).toBeInTheDocument();
@@ -84,14 +84,14 @@ describe("ArtworkCreateForm", () => {
     render(<ArtworkCreateForm />);
 
     // Submit empty to trigger errors
-    fireEvent.click(screen.getByText("Créer l'artwork"));
+    fireEvent.click(screen.getByText("Create artwork"));
 
     await waitFor(() => {
       expect(screen.getByText("Title is required")).toBeInTheDocument();
     });
 
     // Type in the title field
-    fireEvent.change(screen.getByLabelText("Titre"), {
+    fireEvent.change(screen.getByLabelText("Title"), {
       target: { value: "Something" },
     });
 
@@ -106,7 +106,7 @@ describe("ArtworkCreateForm", () => {
     render(<ArtworkCreateForm />);
     fillForm();
 
-    fireEvent.click(screen.getByText("Créer l'artwork"));
+    fireEvent.click(screen.getByText("Create artwork"));
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith("/api/artworks", {
@@ -130,7 +130,7 @@ describe("ArtworkCreateForm", () => {
     render(<ArtworkCreateForm />);
     fillForm();
 
-    fireEvent.click(screen.getByText("Créer l'artwork"));
+    fireEvent.click(screen.getByText("Create artwork"));
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith("/admin/artworks?success=created");
@@ -148,7 +148,7 @@ describe("ArtworkCreateForm", () => {
     render(<ArtworkCreateForm />);
     fillForm();
 
-    fireEvent.click(screen.getByText("Créer l'artwork"));
+    fireEvent.click(screen.getByText("Create artwork"));
 
     await waitFor(() => {
       expect(screen.getByText("Duplicate title")).toBeInTheDocument();
@@ -165,11 +165,11 @@ describe("ArtworkCreateForm", () => {
     render(<ArtworkCreateForm />);
     fillForm();
 
-    fireEvent.click(screen.getByText("Créer l'artwork"));
+    fireEvent.click(screen.getByText("Create artwork"));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Erreur lors de la création de l'artwork.")
+        screen.getByText("Error while creating the artwork.")
       ).toBeInTheDocument();
     });
   });
@@ -181,11 +181,11 @@ describe("ArtworkCreateForm", () => {
     render(<ArtworkCreateForm />);
     fillForm();
 
-    fireEvent.click(screen.getByText("Créer l'artwork"));
+    fireEvent.click(screen.getByText("Create artwork"));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Erreur réseau. Réessaie dans quelques secondes.")
+        screen.getByText("Network error. Please try again in a few seconds.")
       ).toBeInTheDocument();
     });
   });

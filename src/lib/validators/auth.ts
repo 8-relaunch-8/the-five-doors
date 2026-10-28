@@ -33,7 +33,7 @@ const nameSchema = z
 
 export const LoginSchema = z.object({
   email: emailSchema,
-  password: passwordSchema,  // Login: pas besoin de regex (déjà hashé)
+  password: passwordSchema,  // Login: no regex needed (already hashed)
 })
 
 export type LoginInput = z.infer<typeof LoginSchema>
@@ -43,14 +43,14 @@ export type LoginInput = z.infer<typeof LoginSchema>
 export const RegisterSchema = z
   .object({
     email: emailSchema,
-    password: strongPasswordSchema,  // Register: validation forte
+    password: strongPasswordSchema,  // Register: strong validation
     confirmPassword: z.string().min(1, 'Please confirm your password'),
     firstName: nameSchema,
     lastName: nameSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ['confirmPassword'],  // Error sur le champ confirmPassword
+    path: ['confirmPassword'],  // Error on the confirmPassword field
   })
 
 export type RegisterInput = z.infer<typeof RegisterSchema>

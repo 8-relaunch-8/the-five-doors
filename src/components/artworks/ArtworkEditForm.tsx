@@ -88,14 +88,14 @@ export default function ArtworkEditForm({ artwork }: Props) {
 
       if (!res.ok) {
         const body = await res.json().catch(() => null);
-        setApiError(body?.error ?? "Erreur lors de la mise à jour.");
+        setApiError(body?.error ?? "Error while updating the artwork.");
         return;
       }
 
       router.push("/admin/artworks?success=updated");
       router.refresh();
     } catch {
-      setApiError("Erreur réseau. Réessaie dans quelques secondes.");
+      setApiError("Network error. Please try again in a few seconds.");
     } finally {
       setIsSubmitting(false);
     }
@@ -180,14 +180,14 @@ export default function ArtworkEditForm({ artwork }: Props) {
           disabled={isSubmitting}
           className="rounded bg-black px-4 py-2 text-white disabled:opacity-50"
         >
-          {isSubmitting ? "Mise à jour..." : "Enregistrer"}
+          {isSubmitting ? "Saving..." : "Save"}
         </button>
         <button
           type="button"
           onClick={() => router.push("/admin/artworks")}
           className="rounded border px-4 py-2 hover:bg-gray-100"
         >
-          Annuler
+          Cancel
         </button>
       </div>
     </form>

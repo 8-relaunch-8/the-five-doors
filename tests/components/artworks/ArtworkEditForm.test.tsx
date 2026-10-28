@@ -46,15 +46,15 @@ describe("ArtworkEditForm", () => {
   it("renders the save and cancel buttons", () => {
     render(<ArtworkEditForm artwork={fakeArtwork} />);
 
-    expect(screen.getByText("Enregistrer")).toBeInTheDocument();
-    expect(screen.getByText("Annuler")).toBeInTheDocument();
+    expect(screen.getByText("Save")).toBeInTheDocument();
+    expect(screen.getByText("Cancel")).toBeInTheDocument();
   });
 
   // --- Test 3: Cancel button redirects to artworks list ---
   it("redirects to /admin/artworks when clicking Cancel", () => {
     render(<ArtworkEditForm artwork={fakeArtwork} />);
 
-    fireEvent.click(screen.getByText("Annuler"));
+    fireEvent.click(screen.getByText("Cancel"));
 
     expect(mockPush).toHaveBeenCalledWith("/admin/artworks");
   });
@@ -67,7 +67,7 @@ describe("ArtworkEditForm", () => {
       target: { value: "not-a-url" },
     });
 
-    fireEvent.click(screen.getByText("Enregistrer"));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
       expect(screen.getByText("Image URL must be a valid URL")).toBeInTheDocument();
@@ -83,7 +83,7 @@ describe("ArtworkEditForm", () => {
     fireEvent.change(screen.getByLabelText("Image URL"), {
       target: { value: "not-a-url" },
     });
-    fireEvent.click(screen.getByText("Enregistrer"));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
       expect(screen.getByText("Image URL must be a valid URL")).toBeInTheDocument();
@@ -107,7 +107,7 @@ describe("ArtworkEditForm", () => {
       target: { value: "Starry Night Updated" },
     });
 
-    fireEvent.click(screen.getByText("Enregistrer"));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith("/api/artworks/abc-123", {
@@ -132,7 +132,7 @@ describe("ArtworkEditForm", () => {
 
     render(<ArtworkEditForm artwork={fakeArtwork} />);
 
-    fireEvent.click(screen.getByText("Enregistrer"));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith("/admin/artworks?success=updated");
@@ -149,7 +149,7 @@ describe("ArtworkEditForm", () => {
 
     render(<ArtworkEditForm artwork={fakeArtwork} />);
 
-    fireEvent.click(screen.getByText("Enregistrer"));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
       expect(screen.getByText("Artwork not found")).toBeInTheDocument();
@@ -162,11 +162,11 @@ describe("ArtworkEditForm", () => {
 
     render(<ArtworkEditForm artwork={fakeArtwork} />);
 
-    fireEvent.click(screen.getByText("Enregistrer"));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Erreur réseau. Réessaie dans quelques secondes.")
+        screen.getByText("Network error. Please try again in a few seconds.")
       ).toBeInTheDocument();
     });
   });
