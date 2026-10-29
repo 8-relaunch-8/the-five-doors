@@ -41,9 +41,9 @@ async function getArtwork(id: string): Promise<Artwork | null> {
 export default async function EditArtworkPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
   const artwork = await getArtwork(id);
 
   if (!artwork) notFound();

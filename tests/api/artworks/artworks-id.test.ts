@@ -29,7 +29,7 @@ vi.mock("@/lib/utils/logger", () => ({
 
 // --- Helper: build params object ---
 function makeParams(id: string) {
-  return { params: { id } };
+  return { params: Promise.resolve({ id }) };
 }
 
 describe("GET /api/artworks/[id]", () => {
