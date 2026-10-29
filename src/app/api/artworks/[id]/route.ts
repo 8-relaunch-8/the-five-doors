@@ -32,10 +32,10 @@ async function requireStaffOrAdmin(request: NextRequest) {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseId(params.id);
+    const id = parseId((await params).id);
     if (id === null) {
       return NextResponse.json({ error: 'Invalid artwork id' }, { status: 400 });
     }
@@ -52,13 +52,13 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authError = await requireStaffOrAdmin(request);
     if (authError) return authError;
 
-    const id = parseId(params.id);
+    const id = parseId((await params).id);
     if (id === null) {
       return NextResponse.json({ error: 'Invalid artwork id' }, { status: 400 });
     }
@@ -69,7 +69,7 @@ export async function PUT(
     return NextResponse.json({ data: toJsonSafe(artwork) });
   } catch (error: any) {
     if (error.name === 'ZodError') {
-      return NextResponse.json({ error: 'Validation failed', details: error.errors }, { status: 400 });
+      return NextResponse.json({ error: 'Validation failed', details: error.issues }, { status: 400 });
     }
     if (error.message === 'Artwork not found') {
       return NextResponse.json({ error: error.message }, { status: 404 });
@@ -84,13 +84,13 @@ export async function PUT(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authError = await requireStaffOrAdmin(request);
     if (authError) return authError;
 
-    const id = parseId(params.id);
+    const id = parseId((await params).id);
     if (id === null) {
       return NextResponse.json({ error: 'Invalid artwork id' }, { status: 400 });
     }
@@ -101,7 +101,7 @@ export async function PATCH(
     return NextResponse.json({ data: toJsonSafe(artwork) });
   } catch (error: any) {
     if (error.name === 'ZodError') {
-      return NextResponse.json({ error: 'Validation failed', details: error.errors }, { status: 400 });
+      return NextResponse.json({ error: 'Validation failed', details: error.issues }, { status: 400 });
     }
     if (error.message === 'Artwork not found') {
       return NextResponse.json({ error: error.message }, { status: 404 });
@@ -116,13 +116,13 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authError = await requireStaffOrAdmin(request);
     if (authError) return authError;
 
-    const id = parseId(params.id);
+    const id = parseId((await params).id);
     if (id === null) {
       return NextResponse.json({ error: 'Invalid artwork id' }, { status: 400 });
     }
