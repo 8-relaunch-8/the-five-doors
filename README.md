@@ -2,7 +2,7 @@
 
 A full-stack web application to manage a museum's art collection: visitors create an account, staff catalogue and edit artworks through a protected admin area.
 
-Built with Next.js 15, TypeScript, Prisma and PostgreSQL, with authentication written from scratch to understand every layer rather than delegate it to a service.
+Built with Next.js 16, TypeScript, Prisma and PostgreSQL, with authentication written from scratch to understand every layer rather than delegate it to a service.
 
 <!-- Screenshots: add the images to docs/screenshots/ and uncomment.
 | Admin: artwork list | Admin: edit an artwork |
@@ -52,7 +52,7 @@ Honest list, in order of what I would tackle next:
 - **Refresh tokens cannot be revoked.** They are stateless; logging out deletes the cookies but a stolen token stays valid until it expires. Next step: store a token identifier in the database and rotate it on each refresh.
 - **No rate limiting on login.** Brute-force attempts are only slowed down by bcrypt.
 - **Bookings are modelled but not built.** The database already has exhibitions, bookings and ticket types; the pages and API do not exist yet.
-- **Leftover Supabase client code.** Supabase is only used as a hosted PostgreSQL; the unused client files will be removed.
+- **Unused packages still declared.** The Supabase client code is gone, but its packages are still listed in `package.json`; they will be removed with the lockfile update.
 - **Tests cover the API and components, not full user journeys.** End-to-end tests (Playwright) are not written yet.
 
 ## Run it locally
@@ -80,7 +80,7 @@ JWT_SECRET="..."
 JWT_REFRESH_SECRET="..."
 ```
 
-Generate each JWT secret with `openssl rand -hex 64`. The `.env.example` file still lists Supabase keys; they are not needed to run the app.
+Generate each JWT secret with `openssl rand -hex 64`.
 
 ### Scripts
 
