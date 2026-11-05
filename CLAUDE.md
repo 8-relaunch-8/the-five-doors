@@ -32,7 +32,7 @@ Améliorer le produit n'est **pas** l'objectif du moment.
 - **`ETAT.md`** : où en est le projet aujourd'hui, réécrit à chaque fin de session.
 - **Issues GitHub** : le travail à faire et la dette technique connue.
 - **Notion « The Five Doors »** : archive du backlog et des notes d'apprentissage, de janvier à mars 2026. Plus mis à jour.
-- **Ancien dépôt `8-relaunch-8/TheFiveDoors`** : archive. Son historique de commits a été repris ici ; ses anciennes issues et PR y restent.
+- **Ancien dépôt `TheFiveDoors`** : supprimé avec l'ancien compte GitHub, irrécupérable. Son historique de commits avait été repris ici ; ses anciennes issues et PR sont perdues, ce qui explique les numéros cités dans Notion.
 
 ## Pile technique
 
