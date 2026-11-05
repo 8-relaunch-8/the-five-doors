@@ -1,6 +1,6 @@
 # État du projet
 
-Mis à jour le 5 novembre 2026.
+Mis à jour le 5 novembre 2026 (après-midi).
 
 ## Objectif du moment
 
@@ -26,8 +26,8 @@ Impact : fort. Charge : moyenne.
 
 1. Yanis + Claude : écrire et répéter le pitch de 2 minutes. Charge moyenne.
 2. Yanis + Claude : préparer les questions techniques probables (auth, rôles, tests, architecture). Charge lourde.
-3. Claude : inventorier l'ancien dépôt `TheFiveDoors` (issues, PR, branche `feature/admin-artist-crud`) dès que l'accès fonctionne. Charge légère.
-4. Yanis : archiver l'ancien dossier iCloud `TheFiveDoors`, une fois l'inventaire fait. Charge légère.
+3. Yanis : supprimer l'ancien dossier iCloud `TheFiveDoors` (son contenu utile est repris dans ce dépôt et dans l'issue #14). Charge légère.
+4. Yanis + Claude : préparer comment parler de la formation full stack (mai 2025 – février 2026) aux recruteurs. Charge lourde.
 
 ## Questions ouvertes
 
