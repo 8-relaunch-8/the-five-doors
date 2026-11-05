@@ -47,8 +47,5 @@ next-env.d.ts
 .vscode/
 .idea/
 
-# documentation (personal notes)
-/docs/
-
 # Local SQLite databases
 *.db
