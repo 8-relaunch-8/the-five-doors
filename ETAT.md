@@ -1,40 +1,36 @@
 # État du projet
 
-Mis à jour le 5 novembre 2026 (après-midi).
+Mis à jour le 5 novembre 2026.
 
 ## Objectif du moment
 
-Rendre le projet présentable et savoir le présenter à l'oral, d'ici fin novembre 2026.
-Rencontres avec les entreprises : 12 novembre, 16 novembre, puis d'autres en novembre. Les entretiens techniques viendront après.
+Stabiliser et documenter le projet pour pouvoir présenter et expliquer chacun de ses choix techniques. Code gelé jusqu'à fin novembre 2026.
 
 ## Où on en est
 
-- **Phase** : préparation à l'entretien. Code gelé.
+- **Phase** : documentation et consolidation. Code gelé.
 - **Produit** : authentification JWT, rôles (`VISITOR`, `STAFF`, `ADMIN`), CRUD des œuvres en API et en interface admin, 77 tests, CI obligatoire.
-- **Dépôt** : nettoyé fin octobre (dépendances à jour, README pour les recruteurs). Fiche projet, état et doc d'authentification ajoutés le 5 novembre.
+- **Dépôt** : dépendances à jour, README, doc d'authentification, limites connues suivies en issues (#9 à #17).
 
 ## Chemin critique
 
-Un pitch du projet de 2 minutes, prêt pour le 12 novembre.
+Une présentation orale du projet en 2 minutes : quoi, pourquoi, comment, limites, suite.
 
 ## Reprendre ici
 
-Écrire le pitch de 2 minutes : quoi, pourquoi, comment, limites, suite.
+Écrire la présentation de 2 minutes.
 Impact : fort. Charge : moyenne.
 
 ## Prochaines actions
 
-1. Yanis + Claude : écrire et répéter le pitch de 2 minutes. Charge moyenne.
-2. Yanis + Claude : préparer les questions techniques probables (auth, rôles, tests, architecture). Charge lourde.
-3. Yanis : supprimer l'ancien dossier iCloud `TheFiveDoors` (son contenu utile est repris dans ce dépôt et dans l'issue #14). Charge légère.
-4. Yanis + Claude : préparer comment parler de la formation full stack (mai 2025 – février 2026) aux recruteurs. Charge lourde.
+1. Yanis + Claude : écrire et répéter la présentation de 2 minutes. Charge moyenne.
+2. Yanis + Claude : réviser les choix techniques (auth, rôles, tests, architecture) et leurs limites. Charge lourde.
+3. Yanis : ajouter des captures d'écran au README (`docs/screenshots/`). Charge légère.
 
 ## Questions ouvertes
 
-- **Rafraîchissement du jeton non branché** (la session dure 15 minutes) : corriger avant les entretiens, ou seulement le documenter ?
-  Option recommandée : décider après le pitch, selon le temps restant. Le documenter suffit déjà à éviter le piège.
-- **Montrer Notion en entretien ?**
-  Option recommandée : seulement si on le demande, avec une page publique nettoyée.
+- **Rafraîchissement du jeton non branché** (la session dure 15 minutes) : le corriger pendant le gel, ou seulement le documenter ?
+  Option recommandée : décider après la présentation orale. Il est déjà documenté (#9).
 
 ## Parking
 

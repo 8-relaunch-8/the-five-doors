@@ -1,5 +1,7 @@
 # The Five Doors
 
+[![CI](https://github.com/8-relaunch-8/the-five-doors/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/8-relaunch-8/the-five-doors/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A full-stack web application to manage a museum's art collection: visitors create an account, staff catalogue and edit artworks through a protected admin area.
 
 Built with Next.js 16, TypeScript, Prisma and PostgreSQL, with authentication written from scratch to understand every layer rather than delegate it to a service.
