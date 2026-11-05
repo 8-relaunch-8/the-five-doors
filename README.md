@@ -33,6 +33,8 @@ Each layer has one job. Route handlers deal with HTTP (status codes, cookies), v
 
 ## Technical choices
 
+Authentication and roles are explained in detail, with diagrams, in [docs/authentication.md](docs/authentication.md).
+
 - **Authentication written by hand, not outsourced.** JWT access token (15 min) and refresh token (7 days), both in `httpOnly`, `sameSite=strict` cookies, so page scripts cannot read them. Passwords are hashed with bcrypt.
 - **Two checks, not one (defense in depth).** The middleware redirects unauthenticated users away from protected pages, and every protected API route checks the token and the role again. Calling the API directly does not bypass the rules.
 - **Two JWT libraries, on purpose.** Next.js middleware runs on the Edge runtime, which has no Node.js `crypto` module, so it verifies tokens with `jose`. Route handlers run on Node.js and use `jsonwebtoken`.
@@ -49,6 +51,7 @@ Each layer has one job. Route handlers deal with HTTP (status codes, cookies), v
 
 Honest list, in order of what I would tackle next:
 
+- **The access token is not refreshed automatically.** The `/api/auth/refresh` route works, but the front end never calls it, so a session ends when the 15-minute access cookie expires. Next step: call the refresh route when an API call returns `401`, then retry the request.
 - **Refresh tokens cannot be revoked.** They are stateless; logging out deletes the cookies but a stolen token stays valid until it expires. Next step: store a token identifier in the database and rotate it on each refresh.
 - **No rate limiting on login.** Brute-force attempts are only slowed down by bcrypt.
 - **Bookings are modelled but not built.** The database already has exhibitions, bookings and ticket types; the pages and API do not exist yet.
