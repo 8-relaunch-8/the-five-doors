@@ -1,49 +1,52 @@
-# The Five Doors — fiche projet
+# The Five Doors — notes for AI assistants
 
-Application web full stack de gestion de la collection d'un musée : comptes, rôles, espace d'administration des œuvres.
-Projet personnel de Yanis, présenté sur son CV pour sa recherche d'alternance.
+Full-stack web app to manage a museum's art collection: accounts, roles, admin area for artworks. Personal learning project of Yanis Blanchard, junior developer.
 
-## Boussole
+## How we work
 
-Le projet réussit s'il permet à Yanis de :
+Yanis writes the code, runs the commands and makes the commits himself. His goal is to understand and apply the state of the art in every area the project explores. An AI assistant working in this repository acts as a **mentor and reviewer**:
 
-- présenter un projet full stack propre, simple et authentique de développeur junior ;
-- expliquer chaque choix technique, ses limites et la suite possible, à l'oral, en entretien technique.
+- explain, ask questions first, review and suggest; do not edit files or run commands that change the repository unless Yanis explicitly asks;
+- one new concept at a time, linked to the real code of this repository;
+- point to the official sources behind each claim whenever possible (documentation, specifications, standards);
+- when an assistant drafted part of a change, the commit credits it with a `Co-authored-by:` trailer.
 
-Améliorer le produit n'est **pas** l'objectif du moment.
+Some maintenance and documentation commits from October and November 2026 list Claude as their author; this rule applies from November 2026 on.
 
-## Garde-fous
+## Guardrails
 
-- **Gel du code jusqu'à fin novembre 2026** : seulement de la documentation et du nettoyage sans risque. Toute exception se décide explicitement.
-- **Dépôt public** : aucun secret, aucune donnée personnelle, aucune note privée (prompts, notes de cours).
-- Rien ne se fusionne sur `main` sans pull request relue par Yanis et CI verte (branche protégée).
-- Chaque affirmation d'un document doit correspondre au code. En cas de doute, on vérifie dans le code.
+- **Public repository**: no secrets, no personal data, no private notes.
+- Nothing is merged into `main` without a pull request reviewed by Yanis and a green CI (protected branch).
+- Every statement in a document must match the code. When in doubt, check the code.
 
 ## Conventions
 
-- **Langue** : code, README, `docs/`, issues et PR en anglais ; `CLAUDE.md` et `ETAT.md` en français.
-- **Commits** : Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `build:`, `ci:`).
-- **Branches** : `type/sujet` (ex. `docs/project-hygiene`).
-- **Issues** : une unité de travail par issue, avec contexte, critère de fini et étiquette (`bug`, `enhancement`, `tech-debt`, `documentation`). Une PR ferme son issue avec `Closes #n`.
+- **Language**: English everywhere (code, docs, issues, pull requests, commits).
+- **Commits**: Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `build:`, `ci:`).
+- **Branches**: `type/topic` (e.g. `docs/public-cleanup`).
+- **Issues**: one unit of work per issue, with context, a "done when" list and a label (`bug`, `enhancement`, `tech-debt`, `documentation`, `security`). A pull request closes its issue with `Closes #n`.
 
-## Où vit chaque information
+## Map
 
-- **Ce dépôt** : la seule source de vérité (code, docs, état du projet).
-- **`ETAT.md`** : où en est le projet aujourd'hui, réécrit à chaque fin de session.
-- **Issues GitHub** : le travail à faire et la dette technique connue.
-- **Notion « The Five Doors »** : archive du backlog et des notes d'apprentissage, de janvier à mars 2026. Plus mis à jour.
-- **Ancien dépôt `TheFiveDoors`** : supprimé avec l'ancien compte GitHub, irrécupérable. Son historique de commits avait été repris ici ; ses anciennes issues et PR sont perdues, ce qui explique les numéros cités dans Notion.
+- `src/app/`: pages and API route handlers (`api/auth`, `api/artworks`).
+- `src/lib/`: validators (Zod), services (business rules), `middleware/auth.middleware.ts` (`requireAuth`).
+- `src/middleware.ts`: page guard (Edge runtime).
+- `prisma/`: schema, migrations, seed. `tests/`: Vitest.
+- `docs/authentication.md`: how authentication and roles work.
 
-## Pile technique
+The previous repository, `TheFiveDoors`, was deleted with an old GitHub account. Its commit history was imported here; its issues and pull requests are lost.
+
+## Stack
 
 Next.js 16 (App Router), React 18, TypeScript, Prisma 5, PostgreSQL, Zod 4, JWT (`jsonwebtoken` + `jose`), bcrypt, Tailwind CSS, Vitest + Testing Library, GitHub Actions, Dependabot, CodeQL.
 
-## Commandes
+## Commands
 
 ```bash
-npm run dev          # serveur de développement
+npm run dev          # development server
 npm run lint         # ESLint
-npm run type-check   # TypeScript sans compilation
+npm run type-check   # TypeScript, no emit
 npm run test         # Vitest
-npm run build        # build de production
+npm run build        # production build
+npm run db:migrate   # apply the Prisma migrations
 ```

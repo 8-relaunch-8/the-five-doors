@@ -56,7 +56,7 @@ flowchart LR
 ```
 
 - The **middleware** runs on the Edge runtime, which has no Node.js `crypto` module, so it verifies the token with `jose`. It only guards **pages**.
-- Each protected **API route** checks the token again with `requireAuth()` (`jsonwebtoken`, Node.js runtime) and then the role. Calling the API directly therefore does not bypass the rules (defense in depth).
+- The protected **API routes** check the token again with `requireAuth()` (`jsonwebtoken`, Node.js runtime) and then the role. Calling them directly therefore does not bypass the rules (defense in depth). One exception: the account deletion route ([#22](https://github.com/8-relaunch-8/the-five-doors/issues/22)).
 
 ## Roles
 
@@ -67,18 +67,13 @@ flowchart LR
 | `STAFF` | museum staff | everything above + admin area (artwork CRUD) |
 | `ADMIN` | administrator | today, the same rights as `STAFF` |
 
-`ADMIN` and `STAFF` currently share the same permissions. `ADMIN` is reserved for user management, which is not built yet.
-
 ## Logout
 
-`POST /api/auth/logout` deletes both cookies. The tokens themselves stay valid until they expire, because nothing is stored on the server (stateless tokens).
+`POST /api/auth/logout` deletes both cookies.
 
 ## Known gaps
 
-1. **The refresh route exists but no client calls it.** `/api/auth/refresh` issues a new access token from a valid refresh token, but the front end never calls it. When the access cookie expires after 15 minutes, the middleware sees no token and redirects to `/login`: the session effectively lasts 15 minutes.
-2. **Refresh tokens cannot be revoked.** They are stateless. Fix: store a token identifier in the database and rotate it on each refresh.
-3. **No rate limiting on login.** Brute force is only slowed down by bcrypt.
-4. **The middleware does not check issuer and audience**, while `requireAuth()` does. Both should apply the same rules.
+- **The refresh route exists but no client calls it.** `/api/auth/refresh` issues a new access token from a valid refresh token, but the front end never calls it. When the access cookie expires after 15 minutes, the middleware sees no token and redirects to `/login`: the session effectively lasts 15 minutes.
 
 ## References
 
